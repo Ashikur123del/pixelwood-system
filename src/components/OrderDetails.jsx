@@ -77,7 +77,7 @@ const OrderDetailsContent = () => {
     fetchOrderDetails();
   }, [orderId]);
 
-  const copyToClipboard = (text: string) => {
+  const copyToClipboard = (text) => {
     if (text) {
       navigator.clipboard.writeText(text);
       setCopied(true);
@@ -123,7 +123,7 @@ const OrderDetailsContent = () => {
 
   const generatedId = order._id ? `ORD-${order._id.substring(0, 8).toUpperCase()}` : "N/A";
 
-  const getStatusStyle = (status: string) => {
+  const getStatusStyle = (status) => {
     const text = status?.toLowerCase() || 'pending';
     if (text === 'paid' || text === 'delivered' || text === 'confirmed') {
       return "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
