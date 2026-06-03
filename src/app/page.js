@@ -10,7 +10,7 @@ export default function Home() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <main className="bg-[#50589C]">
+   <main className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
       
       <HeroPage 
         selectedTab={selectedTab} 

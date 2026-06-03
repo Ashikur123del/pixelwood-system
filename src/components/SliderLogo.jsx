@@ -84,7 +84,7 @@ const SliderLogo = () => {
                     alt={`Slider Dynamic Item - ${index + 1}`}
                     fill
                     unoptimized 
-                    className="object-cover rounded-sm"
+                    className="object-cover rounded-xl"
                   />
                 </div>
               </SwiperSlide>

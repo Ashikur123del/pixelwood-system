@@ -91,6 +91,9 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, totalOrders }) => {
               <Link href="/dashboard/slideradd" onClick={handleLinkClick} className={getLinkClass("/dashboard/slideradd")}>
                 <div className="flex items-center gap-3"><FiMessageSquare size={16} /> Add Slider</div>
               </Link>
+              <Link href="/dashboard/pixel" onClick={handleLinkClick} className={getLinkClass("/dashboard/pixel")}>
+                <div className="flex items-center gap-3"><FiMessageSquare size={16} /> Pixel ID Add</div>
+              </Link>
             </nav>
           </div>
         </div>

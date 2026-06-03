@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Button,
@@ -15,6 +15,9 @@ import {
   FaBaby,
   FaPray,
   FaTimes,
+  FaMobileAlt,
+  FaBoxOpen,
+  FaKey
 } from "react-icons/fa";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -22,6 +25,18 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
   const [loading, setLoading] = useState(false);
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [deliveryCharge, setDeliveryCharge] = useState(0);
+  
+  // 🛒 Wholesale Quantity State (Default 100 for MobileStand & ChabiRing)
+  const [quantity, setQuantity] = useState(100);
+
+  // Reset quantity when modal opens or tab changes
+  useEffect(() => {
+    if (selectedType === "MobileStand" || selectedType === "ChabiRing") {
+      setQuantity(100);
+    } else {
+      setQuantity(1);
+    }
+  }, [selectedType, isOpen]);
 
   const districts = [
     { id: "1", value: "comilla", name: "কুমিল্লা" },
@@ -43,7 +58,7 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
     { id: "17", value: "joypurhat", name: "জয়পুরহাট" },
     { id: "18", value: "chapainawabganj", name: "চাঁপাইনবাবগঞ্জ" },
     { id: "19", value: "naogaon", name: "নওগাঁ" },
-    { id: "20", value: "jashore", name: "যশোর" },
+    { id: "20", value: "jashore", name: "যশোহর" },
     { id: "21", value: "satkhira", name: "সাতক্ষীরা" },
     { id: "22", value: "meherpur", name: "মেহেরপুর" },
     { id: "23", value: "narail", name: "নড়াইল" },
@@ -60,10 +75,9 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
     { id: "34", value: "bhola", name: "ভোলা" },
     { id: "35", value: "barguna", name: "বরগুনা" },
     { id: "36", value: "sylhet", name: "সিলেট" },
-    { id: "37", value: "moulvibazar", name: "مৌলভীবাজার" },
+    { id: "37", value: "moulvibazar", name: "মৌলভীবাজার" },
     { id: "38", value: "habiganj", name: "হবিগঞ্জ" },
     { id: "39", value: "sunamganj", name: "সুনামগঞ্জ" },
-    // ঢাকা বিভাগের জেলাসমূহ (ID: 40 থেকে 52)
     { id: "40", value: "narsingdi", name: "নরসিংদী" },
     { id: "41", value: "gazipur", name: "গাজীপুর" },
     { id: "42", value: "shariatpur", name: "শরীয়তপুর" },
@@ -74,14 +88,13 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
     { id: "47", value: "dhaka", name: "ঢাকা" },
     { id: "48", value: "munshiganj", name: "মুন্সিগঞ্জ" },
     { id: "49", value: "rajbari", name: "রাজবাড়ী" },
-    { id: "50", value: "madaripur", name: "মাদারীপুর" }, // আরবিক টাইপো ফিক্সড
+    { id: "50", value: "madaripur", name: "মাদারীপুর" },
     { id: "51", value: "gopalganj", name: "গোপালগঞ্জ" },
-    { id: "52", value: "faridpur", name: "ফরিদপুর" },
-    // অন্যান্য বিভাগের জেলাসমূহ
+    { id: "52", value: "faridpur", name: "ফریدপুর" },
     { id: "53", value: "panchagarh", name: "পঞ্চগড়" },
     { id: "54", value: "dinajpur", name: "দিনাজপুর" },
     { id: "55", value: "lalmonirhat", name: "লালমনিরহাট" },
-    { id: "56", value: "nilphamari", name: "নীলфামারী" },
+    { id: "56", value: "nilphamari", name: "নীলফামারী" },
     { id: "57", value: "gaibandha", name: "গাইবান্ধা" },
     { id: "58", value: "thakurgaon", name: "ঠাকুরগাঁও" },
     { id: "59", value: "rangpur", name: "রংপুর" },
@@ -92,8 +105,18 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
     { id: "64", value: "netrokona", name: "নেত্রকোণা" }
   ];
 
-  const productPrice = 999;
-  const totalAmount = productPrice + deliveryCharge;
+  // 💰 Dynamic Price Rules (Wholesale vs Retail)
+  const getProductUnitPrice = () => {
+    switch (selectedType) {
+      case "MobileStand": return 120; // পাইকারি প্রতি পিস ১২০ টাকা
+      case "ChabiRing": return 45;    // পাইকারি প্রতি পিস ৪৫ টাকা
+      default: return 999;           // রিটেইল প্রোডাক্ট (Wedding, Birth, etc.)
+    }
+  };
+
+  const unitPrice = getProductUnitPrice();
+  const productPriceTotal = unitPrice * quantity;
+  const totalAmount = productPriceTotal + deliveryCharge;
 
   const handleDistrictChange = (e) => {
     const value = e.target.value;
@@ -105,10 +128,9 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
     }
     
     const matchedDistrict = districts.find(d => d.value === value);
-    
     if (matchedDistrict) {
       const districtId = parseInt(matchedDistrict.id);
-      
+      // ঢাকা বিভাগের জেলা হলে ৮০ টাকা, বাইরের হলে ১২০ টাকা
       if (districtId >= 40 && districtId <= 52) {
         setDeliveryCharge(80);
       } else {
@@ -136,11 +158,16 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
       toast.error("অনুগ্রহ করে জেলা সিলেক্ট করুন");
       return;
     }
+
+    // 🛑 Hard Validation for Wholesale MOQ (Minimum 100 Pcs)
+    if ((selectedType === "MobileStand" || selectedType === "ChabiRing") && quantity < 100) {
+      toast.error("দুঃখিত, এই প্রোডাক্টটি সর্বনিম্ন ১০০ পিস অর্ডার করতে হবে।");
+      return;
+    }
     
     setLoading(true);
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
-
     const districtInfo = districts.find(d => d.value === selectedDistrict);
 
     try {
@@ -153,23 +180,51 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
           districtValue: districtInfo?.value || "",
           districtId: districtInfo?.id || "",
           orderType: selectedType, 
+          quantity: Number(quantity),
           status: 'pending',
-          productPrice: productPrice,
+          productPrice: productPriceTotal,
           deliveryCharge: deliveryCharge, 
           totalAmount: totalAmount 
         }),
       });
 
       if (response.ok) {
-        toast.success("অর্ডারটি সফলভাবে জমা হয়েছে!");
+        // 🎉 Facebook Pixel Purchase Event Trigger
+        import("react-facebook-pixel")
+          .then((x) => x.default)
+          .then((reactPixel) => {
+            reactPixel.track("Purchase", {
+              value: totalAmount,
+              currency: "BDT",
+              content_name: getModalTitle(),
+              content_ids: [selectedType],
+              content_type: "product",
+              num_items: Number(quantity)
+            });
+          })
+          .catch((err) => console.log("Pixel Error:", err));
+
+        toast.success("পাইকারি অর্ডারটি সফলভাবে জমা হয়েছে!");
         setTimeout(() => { onClose(); window.location.reload(); }, 1500);
       } else {
-        toast.error("অর্ডারটি সাবমিট করা যায়নি। আবার চেষ্টা করুন।");
+        toast.error("অর্ডারটি সাবমিট করা যায়নি। আবার চেষ্টা করুন।");
       }
     } catch (error) {
       toast.error("সার্ভার কানেক্ট হতে পারছে না।");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const getModalTitle = () => {
+    switch (selectedType) {
+      case "wedding": return "বিবাহ স্মরণিকা";
+      case "birth": return "জন্মদিন/আকিকা";
+      case "death": return "স্মরণিকা";
+      case "MobileStand": return "মোবাইল স্ট্যান্ড (পাইকারি)";
+      case "TesuBox": return "টিস্যু বক্স";
+      case "ChabiRing": return "চাবির রিং (পাইকারি)";
+      default: return "প্রোডাক্ট";
     }
   };
 
@@ -194,8 +249,11 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
                     {selectedType === "wedding" && <FaRing />}
                     {selectedType === "birth" && <FaBaby />}
                     {selectedType === "death" && <FaPray />}
+                    {selectedType === "MobileStand" && <FaMobileAlt />}
+                    {selectedType === "TesuBox" && <FaBoxOpen />}
+                    {selectedType === "ChabiRing" && <FaKey />}
                   </span>
-                  <span>{selectedType === "wedding" ? "বিবাহ" : selectedType === "birth" ? "জন্মদিন/আকিকা" : "স্মরণিকা"} অর্ডার</span>
+                  <span>{getModalTitle()}</span>
                 </div>
                 <button type="button" onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-gray-400 hover:text-white transition-all">
                   <FaTimes size={20} />
@@ -205,6 +263,13 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
               {/* Form Content */}
               <Form onSubmit={handleSubmit} className="overflow-y-auto p-6 md:p-8 space-y-6 custom-scrollbar">
                 
+                {/* 🚨 MOQ Notice Banner for Wholesale Products */}
+                {(selectedType === "MobileStand" || selectedType === "ChabiRing") && (
+                  <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 text-amber-400 text-xs font-medium">
+                    ⚠️ <strong>পাইকারি অর্ডার নোটিশ:</strong> এই প্রোডাক্টটি তৈরিতে কাস্টม ডাইস/মেশিন সেটআপের কারণে সর্বনিম্ন <strong>১০০ পিস</strong> অর্ডার করতে হবে।
+                  </div>
+                )}
+
                 {/* Contact Information */}
                 <div className="space-y-4">
                   <h4 className="text-[#FFDE42] text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">যোগাযোগের তথ্য</h4>
@@ -224,6 +289,29 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
                 <div className="space-y-4">
                   <h4 className="text-[#FFDE42] text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">প্রোডাক্টের তথ্য</h4>
                   
+                  {/* Wholesale Quantity Input (Dynamic) */}
+                  {(selectedType === "MobileStand" || selectedType === "ChabiRing") && (
+                    <div className="bg-slate-800/20 p-4 rounded-xl border border-white/5 grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
+                      <div>
+                        <Label className="text-[#FFDE42] text-xs font-bold block mb-1">অর্ডার কোয়ান্টিটি (সর্বনিম্ন ১০০)</Label>
+                        <input 
+                          required 
+                          name="quantity" 
+                          type="number" 
+                          min="100"
+                          value={quantity}
+                          onChange={(e) => setQuantity(Math.max(0, parseInt(e.target.value) || 0))}
+                          className="w-full h-12 bg-white text-slate-900 border border-slate-200 rounded-xl px-4 font-bold text-lg outline-none focus:border-[#FFDE42] transition-all" 
+                        />
+                      </div>
+                      <div className="text-right sm:text-left pt-2 sm:pt-6">
+                        <span className="text-slate-400 text-xs block">প্রতি পিসের মূল্য:</span>
+                        <span className="text-white text-lg font-bold">৳{unitPrice} / পিস</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Wedding Template */}
                   {selectedType === "wedding" && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <TextField isRequired name="groomName"><Label className="text-slate-300 text-xs">বরের নাম</Label><Input variant="bordered" classNames={inputStyles} /></TextField>
@@ -233,12 +321,13 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
                       <TextField name="groomMother"><Label className="text-slate-300 text-xs">বরের মাতার নাম</Label><Input variant="bordered" classNames={inputStyles} /></TextField>
                       <TextField name="brideMother"><Label className="text-slate-300 text-xs">কনের মাতার নাম</Label><Input variant="bordered" classNames={inputStyles} /></TextField>
                       <div className="md:col-span-2">
-                        <Label className="text-slate-300 text-xs block mb-1 font-medium">বিয়ের তারিখ</Label>
+                        <Label className="text-slate-300 text-xs block mb-1 font-medium">বিয়নের তারিখ</Label>
                         <input required name="eventDate" type="date" className="w-full h-12 bg-slate-50 text-slate-900 border border-slate-200 rounded-xl p-3 outline-none focus:border-[#FFDE42] transition-all" />
                       </div>
                     </div>
                   )}
 
+                  {/* Birth Template */}
                   {selectedType === "birth" && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <TextField isRequired name="babyName"><Label className="text-slate-300 text-xs">শিশুর নাম</Label><Input variant="bordered" classNames={inputStyles} /></TextField>
@@ -251,6 +340,7 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
                     </div>
                   )}
 
+                  {/* Death Template */}
                   {selectedType === "death" && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <TextField isRequired name="deceasedName"><Label className="text-slate-300 text-xs">মৃত ব্যক্তির নাম</Label><Input variant="bordered" classNames={inputStyles} /></TextField>
@@ -262,14 +352,48 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
                     </div>
                   )}
 
+                  {/* Mobile Stand Custom Fields */}
+                  {selectedType === "MobileStand" && (
+                    <div className="grid grid-cols-1 gap-4">
+                      <TextField isRequired name="engravingName">
+                        <Label className="text-slate-300 text-xs">স্ট্যান্ডে খোদাই করার নাম / ব্র্যান্ড লোগো টেক্সট</Label>
+                        <Input placeholder="যে নামটি মোবাইল স্ট্যান্ডে খোদাই করতে চান" variant="bordered" classNames={inputStyles} />
+                      </TextField>
+                    </div>
+                  )}
+
+                  {/* Tissue Box Custom Fields */}
+                  {selectedType === "TesuBox" && (
+                    <div className="grid grid-cols-1 gap-4">
+                      <TextField isRequired name="tissueBoxText">
+                        <Label className="text-slate-300 text-xs">বক্সের ওপর খোদাই করার নাম / ব্র্যান্ড</Label>
+                        <Input placeholder="যেমন: আপনার পরিবারের নাম বা রেস্টুরেন্টের নাম" variant="bordered" classNames={inputStyles} />
+                      </TextField>
+                    </div>
+                  )}
+
+                  {/* Keychain Custom Fields */}
+                  {selectedType === "ChabiRing" && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <TextField isRequired name="keychainTextFront">
+                        <Label className="text-slate-300 text-xs">সামনের পাশের টেক্সট</Label>
+                        <Input placeholder="নাম বা মোবাইল নাম্বার" variant="bordered" classNames={inputStyles} />
+                      </TextField>
+                      <TextField name="keychainTextBack">
+                        <Label className="text-slate-300 text-xs">পেছনের পাশের টেক্সট (ঐচ্ছিক)</Label>
+                        <Input placeholder="অতিরিক্ত কোনো লেখা" variant="bordered" classNames={inputStyles} />
+                      </TextField>
+                    </div>
+                  )}
+
                   <TextField name="specialMessage">
-                    <Label className="text-slate-300 text-xs">বার্তা / বাণী (ঐচ্ছিক)</Label>
-                    <TextArea placeholder="ছোট কোনো উদ্ধৃতি যা কার্ডে খোদাই করা হবে..." variant="bordered" classNames={{...inputStyles, input: "text-slate-900 pt-3 h-24"}} />
+                    <Label className="text-slate-300 text-xs">বার্তা / বাণী / অতিরিক্ত নির্দেশনা (ঐচ্ছিক)</Label>
+                    <TextArea placeholder="ছোট কোনো উদ্ধৃতি বা বিশেষ নির্দেশনা..." variant="bordered" classNames={{...inputStyles, input: "text-slate-900 pt-3 h-24"}} />
                   </TextField>
                 </div>
 
                 <div className="w-full h-px bg-white/5"></div>
-              
+                
                 {/* Shipping Details */}
                 <div className="space-y-4">
                   <h4 className="text-[#FFDE42] text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">ডেলিভারি ঠিকানা</h4>
@@ -302,11 +426,6 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
                       </select>
                     </div>
                   </div>
-                  
-                  <TextField name="receiverName">
-                    <Label className="text-slate-300 text-xs mb-1">প্রাপকের নাম (ঐচ্ছিক)</Label>
-                    <Input placeholder="যদি অন্য কেউ রিসিভ করে" variant="bordered" classNames={inputStyles} />
-                  </TextField>
                 </div>
 
                 {/* Sticky Order Action Summary Box */}
@@ -314,7 +433,7 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
                   <div className="flex justify-between items-center mb-6">
                     <div className="space-y-1">
                       <div className="text-slate-400 text-xs flex gap-2">
-                        <span>প্রোডাক্ট: ৳{productPrice}</span>
+                        <span>মোট প্রোডাক্ট মূল্য: ৳{productPriceTotal}</span>
                         <span>+</span>
                         <span className="text-yellow-400 font-medium">ডেলিভারি: ৳{deliveryCharge}</span>
                       </div>
@@ -328,9 +447,13 @@ const OrderModal = ({ isOpen, onClose, selectedType }) => {
                   <Button
                     type="submit"
                     isLoading={loading}
-                    className="w-full bg-[#FFDE42] hover:bg-white text-slate-950 font-black py-8 text-xl rounded-2xl shadow-xl transition-all active:scale-95 cursor-pointer"
+                    disabled={(selectedType === "MobileStand" || selectedType === "ChabiRing") && quantity < 100}
+                    className="w-full bg-[#FFDE42] disabled:bg-slate-700 disabled:text-slate-400 hover:bg-white text-slate-950 font-black py-8 text-xl rounded-2xl shadow-xl transition-all active:scale-95 cursor-pointer"
                   >
-                    অর্ডার কনফার্ম করুন
+                    {((selectedType === "MobileStand" || selectedType === "ChabiRing") && quantity < 100) 
+                      ? "সর্বনিম্ন ১০০ পিস অর্ডার করতে হবে" 
+                      : "পাইকারি অর্ডার কনফর্ম করুন"
+                    }
                   </Button>
                 </div>
               </Form>

@@ -1,5 +1,8 @@
 import { Hind_Siliguri } from "next/font/google";
 import "./globals.css";
+import FacebookPixel from "@/components/FacebookPixel";
+import { Toaster } from 'react-hot-toast';
+import "./globals.css"
 
 // Hind Siliguri font setup
 const hindSiliguri = Hind_Siliguri({
@@ -19,7 +22,9 @@ export default function RootLayout({ children }) {
     <html lang="en" className="h-full antialiased">
 
       <body className={`${hindSiliguri.className} min-h-full flex flex-col`}  cz-shortcut-listen="true">
+        <FacebookPixel />
         {children}
+        <Toaster position="top-center" reverseOrder={false} />
       </body>
     </html>
   );
