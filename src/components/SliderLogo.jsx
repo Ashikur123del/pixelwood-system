@@ -70,9 +70,9 @@ const SliderLogo = () => {
             // 🛠️ Safety Check: imageUrl ba imageData jekonotai thakte pare (Base64 check included)
             const currentImg = item?.imageUrl || item?.imageData;
 
-            if (!currentImg) return null; // Jodi image thikmoto na thake tobe crash na kore skip korbe
+            if (!currentImg) return null; 
 
-            // Path pattern fix string lookup check
+          
             const finalSrc = currentImg.startsWith("http") || currentImg.startsWith("data:image")
               ? currentImg 
               : `${BACKEND_BASE_URL}${currentImg}`;
