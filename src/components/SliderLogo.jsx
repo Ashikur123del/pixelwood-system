@@ -11,10 +11,10 @@ const SliderLogo = () => {
   const [sliderImages, setSliderImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const BACKEND_BASE_URL = "http://localhost:5000"; 
+  
 
   useEffect(() => {
-    fetch(`${BACKEND_BASE_URL}/api/slider-images`)
+    fetch(`https://pixelwood-server.vercel.app/api/slider-images`)
       .then((res) => {
         if (!res.ok) throw new Error("Database dynamic fetch error");
         return res.json();
