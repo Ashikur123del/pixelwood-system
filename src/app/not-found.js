@@ -10,7 +10,6 @@ const NotFound = () => {
       <div className="absolute bottom-10 right-10 w-[250px] h-[250px] bg-cyan-500/5 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="max-w-md w-full relative z-10 space-y-6">
-        
    
         <div className="relative inline-block select-none">
           <h1 className="text-[12rem] font-black tracking-widest text-transparent bg-clip-text bg-gradient-to-b from-blue-500/30 to-transparent leading-none select-none">
