@@ -16,7 +16,6 @@ export default function Home() {
         setSelectedTab={setSelectedTab} 
         setIsModalOpen={setIsModalOpen} 
       />
-      
       <FeaturesWithAbout 
         selectedTab={selectedTab} 
         isModalOpen={isModalOpen} 
