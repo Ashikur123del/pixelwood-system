@@ -11,10 +11,10 @@ const SliderLogo = () => {
   const [sliderImages, setSliderImages] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  
+  const BACKEND_BASE_URL = "https://pixelwood-server.vercel.app"; 
 
   useEffect(() => {
-    fetch(`https://pixelwood-server.vercel.app/api/slider-images`)
+    fetch(`${BACKEND_BASE_URL}/api/slider-images`)
       .then((res) => {
         if (!res.ok) throw new Error("Database dynamic fetch error");
         return res.json();
@@ -70,9 +70,9 @@ const SliderLogo = () => {
             // 🛠️ Safety Check: imageUrl ba imageData jekonotai thakte pare (Base64 check included)
             const currentImg = item?.imageUrl || item?.imageData;
 
-            if (!currentImg) return null; 
+            if (!currentImg) return null; // Jodi image thikmoto na thake tobe crash na kore skip korbe
 
-          
+            // Path pattern fix string lookup check
             const finalSrc = currentImg.startsWith("http") || currentImg.startsWith("data:image")
               ? currentImg 
               : `${BACKEND_BASE_URL}${currentImg}`;
