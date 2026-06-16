@@ -47,7 +47,6 @@ const PixelPage = () => {
     fetchPixelConfig();
   }, []);
 
-  // ২. ইনপুট ফিল্ড থেকে নতুন পিক্সেল আইডি ডাটাবেজে পাঠানো
   const handleUpdatePixel = (e) => {
     e.preventDefault();
     if (!pixelId.trim()) {

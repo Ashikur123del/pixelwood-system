@@ -16,8 +16,7 @@ const OrderCom = () => {
   const [selectedDate, setSelectedDate] = useState("");
 
   const statuses = ["All", "NEW", "PROCESSING", "ON HOLD", "COMPLETED", "CANCELLED", "REFUNDED"];
-
-  // MongoDB ObjectId থেকে লোকাল ডেট বের করার সেফ ফাংশন
+ 
   const getLocalDateFromId = (id) => {
     if (!id || typeof id !== 'string' || id.length !== 24) return "N/A";
     try {
@@ -33,11 +32,9 @@ const OrderCom = () => {
     }
   };
 
-  // 📥 অর্ডার লোড করার মেইন ফাংশন
   const loadOrders = useCallback(async () => {
     try {
       setLoading(true);
-      // ⚠️ এখানে আপনার নতুন ব্যাক-এন্ড সার্ভারের লিংকটি বসিয়ে দিন
       const res = await fetch("https://pixelwood-server.vercel.app/orders", { cache: "no-store" });
       const data = await res.json();
       

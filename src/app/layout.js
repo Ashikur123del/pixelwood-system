@@ -22,7 +22,8 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full antialiased">
 
-      <body className={`${hindSiliguri.className} min-h-full flex flex-col`}  cz-shortcut-listen="true">
+      <body className={`${hindSiliguri.className} min-h-full flex flex-col`}  cz-shortcut-listen="true"
+      >
        <Suspense fallback={null}>
           <FacebookPixel />
         </Suspense>
@@ -31,4 +32,4 @@ export default function RootLayout({ children }) {
       </body>
     </html>
   );
-}
+} 

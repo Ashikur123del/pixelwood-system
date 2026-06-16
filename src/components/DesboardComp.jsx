@@ -14,7 +14,6 @@ const DesboardComp = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        // ⚠️ নিচে আপনার নতুন ব্যাক-এন্ড সার্ভারের লাইভ লিংক দুটি বসিয়ে দিন
         const [ordersRes, viewsRes] = await Promise.all([
           fetch("https://pixelwood-server.vercel.app/orders", { cache: "no-store" }),
           fetch("https://pixelwood-server.vercel.app/views", { cache: "no-store" })
@@ -212,9 +211,6 @@ const DesboardComp = () => {
                 <Badge color="danger" size="sm" className="absolute -top-1 -right-1">{orders.length}</Badge>
               </div>
             </DropdownTrigger>
-            <DropdownMenu aria-label="Notifications">
-              <DropdownItem key="sync">System Live Synchronized</DropdownItem>
-            </DropdownMenu>
           </Dropdown>
 
           <div className="bg-[#081730]/70 backdrop-blur-md border border-slate-800/90 p-2.5 px-5 rounded-xl flex items-center gap-3 shadow-lg select-none">

@@ -21,8 +21,8 @@ const LoginPage = () => {
     rememberMe: false,
   });
 
-  const DEFAULT_PHONE = '01724166864';
-  const DEFAULT_PASSWORD = 'wl166864';
+  const DEFAULT_PHONE = '01688667870';
+  const DEFAULT_PASSWORD = 'pw01688';
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

@@ -23,7 +23,6 @@ export default function DashboardLayout({ children }) {
 
   const loadCount = useCallback(async () => {
     try {
-      // ⚠️ এখানে আপনার নতুন ব্যাক-এন্ড সার্ভারের লাইভ লিংকটি বসিয়ে দিন
       const res = await fetch("https://pixelwood-server.vercel.app/orders", { cache: "no-store" });
       const data = await res.json();
       if (Array.isArray(data)) setTotalOrders(data.length);

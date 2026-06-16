@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 
 import "swiper/css";
+import { Spinner } from "@heroui/react";
 
 const SliderLogo = () => {
   const [sliderImages, setSliderImages] = useState([]);
@@ -32,8 +33,8 @@ const SliderLogo = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-10 text-gray-500">
-        Slider load hocche...
+      <div className="flex flex-col items-center gap-2">
+        <Spinner size="xl" className="text-red-500"/>
       </div>
     );
   }

@@ -12,8 +12,6 @@ export default function FacebookPixel() {
 
   useEffect(() => {
     const BACKEND_URL = "https://pixelwood-server.vercel.app/api/pixel-config";
-    // const BACKEND_URL = "http://localhost:5000/api/pixel-config"; // লোকাল টেস্টের জন্য
-
     fetch(BACKEND_URL)
       .then((res) => {
         if (!res.ok) return { success: false, pixelId: null };
@@ -31,7 +29,7 @@ export default function FacebookPixel() {
               reactPixel.init(PIXEL_ID, null, { autoConfig: true, debug: false });
               reactPixel.pageView(); 
               isInitialized.current = true; 
-              console.log(`🚀 Global Facebook Pixel (${PIXEL_ID}) Ready!`);
+              console.log(`Global Facebook Pixel (${PIXEL_ID}) Ready!`);
             });
         }
       })

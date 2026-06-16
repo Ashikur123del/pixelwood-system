@@ -31,7 +31,6 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, totalOrders }) => {
         md:sticky md:translate-x-0 md:z-30`} 
     >
       <div>
-        {/* Header */}
         <div className="p-5 border-b border-slate-800/60 flex items-center justify-between h-14">
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 bg-gradient-to-tr from-purple-600 to-blue-500 rounded-lg flex items-center justify-center font-black text-white text-xs shadow-md">P</div>
@@ -46,7 +45,6 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, totalOrders }) => {
           </button>
         </div>
 
-        {/* Navigation Links */}
         <div className="p-4 space-y-6 overflow-y-auto max-h-[calc(100vh-140px)] custom-scrollbar">
           <Link 
             href="/dashboard" 
@@ -62,28 +60,19 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, totalOrders }) => {
 
           <div>
             <nav className="space-y-1">
-              {/* Product */}
               <Link href="/dashboard/products" onClick={handleLinkClick} className={getLinkClass("/dashboard/products")}>
                 <div className="flex items-center gap-3"><FiBox size={16} /> Product</div>
               </Link>
-              
-              {/* Service */}
               <Link href="/dashboard/service" onClick={handleLinkClick} className={getLinkClass("/dashboard/service")}>
                 <div className="flex items-center gap-3"><FiBox size={16} /> Service</div>
               </Link>
-              
-              {/* Order */}
               <Link href="/dashboard/order" onClick={handleLinkClick} className={getLinkClass("/dashboard/order")}>
                 <div className="flex items-center gap-3"><FiShoppingCart size={16} /> Order</div>
                 <span className="bg-blue-600 text-white text-[10px] px-2 py-0.5 rounded-full font-mono font-bold">{totalOrders}</span>
               </Link>
-
-              {/* Return Order */}
               <Link href="/dashboard/returns" onClick={handleLinkClick} className={getLinkClass("/dashboard/returns")}>
                 <div className="flex items-center gap-3"><FiCornerUpLeft size={16} /> Return Order</div>
               </Link>
-
-              {/* Review */}
               <Link href="/dashboard/reviews" onClick={handleLinkClick} className={getLinkClass("/dashboard/reviews")}>
                 <div className="flex items-center gap-3"><FiMessageSquare size={16} /> Review</div>
               </Link>
@@ -98,8 +87,6 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen, totalOrders }) => {
           </div>
         </div>
       </div>
-
-      {/* Footer Profile/Logout */}
       <div className="p-4 border-t border-slate-800/60 flex items-center justify-between bg-slate-900/20 flex-shrink-0">
         <span className="text-xs text-slate-400 truncate max-w-[170px]" title="bayplegen999@gmail.com">
           bayplegen999@gmail.com
